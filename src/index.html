@@ -2,11 +2,42 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 </head>
 
 <body>
-    <h1>Hello!</h1>
+
+  <section>
+    <h2>Articles</h2>
+    
+    <button id='button-get-articles'>Get articles</button>
+    
+    <select id="list-articles"></select>
+
+    <p id="paragraph-body"></p>
+  </section>
+
+  <section>
+    <h2>Stock prices</h2>
+
+    <label>Symbol</label>
+    <input id="input-stock-symbol" type="text" placeholder="Enter stock symbol" />
+    <button id="button-get-price">Get price</button>
+  </section>
+
+  <section id="section-price"></section>
+
+  <section>
+    <h2>Sentiment Analysis</h2>
+
+    <label>Text to analyze</label>
+    <textarea id="input-text" placeholder="Enter text to analyze"></textarea>
+
+    <button id="button-analyze">Analyze!</button>
+    <button id="button-cancel">Cancel</button>
+  </section>
+
+  <section id="section-results"></section>
 </body>
 
 </html>
