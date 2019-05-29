@@ -1,3 +1,8 @@
+import { fromEvent, Subject } from "rxjs";
+import { map, switchMap, retryWhen, repeatWhen, delay, takeWhile, withLatestFrom, tap, share } from "rxjs/operators";
+import { ajax } from "rxjs/ajax";
+import { url } from "./config";
+
 interface AnalyzeTask {
   id: number;
   status: 'inProgress' | 'cancelled' | 'finished';
@@ -22,3 +27,17 @@ const updateUI = (task: AnalyzeTask) => {
       return;
   }
 }
+
+const startAnalysis = (text: string) =>
+  ajax.post(`${url}/analyze`, { message: text }).pipe(
+    map(ajaxResponse => ajaxResponse.response as AnalyzeTask)
+  );
+
+const getTaskStatus = (id: number) =>
+    ajax.getJSON<AnalyzeTask>(`${url}/analyze/${id}`);
+
+const cancelTask = (id: number) => 
+  ajax.post(`${url}/analyze/${id}/cancel`);
+
+const analyzeButtonClick$ = fromEvent(analyzeButtonEl, 'click');
+const cancelButtonClick$ = fromEvent(cancelButtonEl, 'click');
