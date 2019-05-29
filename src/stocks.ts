@@ -1,5 +1,5 @@
 import { fromEvent } from "rxjs";
-import { map, switchMap, retry } from "rxjs/operators";
+import { map, switchMap, retry, tap } from "rxjs/operators";
 import { ajax } from "rxjs/ajax";
 import { url } from "./config";
 
@@ -17,6 +17,7 @@ fromEvent(getPriceButtonEl, 'click').pipe(
   switchMap(symbol => 
     ajax.getJSON<PriceResult>(`${url}/stocks/${symbol}`)
   ),
+  tap(() => {}, error => priceSectionEl.innerHTML = `Error: ${error}`),
   retry(),
 ).subscribe(
   result => priceSectionEl.innerHTML = `Price: ${result.price}`,
