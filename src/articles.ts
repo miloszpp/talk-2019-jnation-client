@@ -8,31 +8,23 @@ interface Article {
   title: string;
 }
 
-type ArticleWithBody = Article & { body: string };
+const getArticlesButton1El = document.getElementById('button-get-articles-1') as HTMLButtonElement;
+const getArticlesButton2El = document.getElementById('button-get-articles-2') as HTMLButtonElement;
+const articlesList1El = document.getElementById('list-articles-1') as HTMLSelectElement;
+const articlesList2El = document.getElementById('list-articles-2') as HTMLSelectElement;
 
-const getArticlesButtonEl = document.getElementById('button-get-articles') as HTMLButtonElement;
-const articlesListEl = document.getElementById('list-articles') as HTMLSelectElement;
-const bodyParagraphEl = document.getElementById('paragraph-body') as HTMLParagraphElement;
-
-const updateArticleList = (articles: Article[]) => {
-  articlesListEl.innerHTML = articles.map(
+const updateArticleList = (el: HTMLSelectElement) => (articles: Article[]) => {
+  el.innerHTML = articles.map(
     article => `<option value='${article.id}'>${article.title}</option>`
   ).join('');
 };
 
-const updateArticle = (article: ArticleWithBody) => {
-  bodyParagraphEl.innerText = article.body;
-}
-
-fromEvent(getArticlesButtonEl, 'click').pipe(
+fromEvent(getArticlesButton1El, 'click').pipe(
   switchMap(() => ajax.getJSON<Article[]>(`${url}/articles`)),
   retry(),
-).subscribe(updateArticleList);
+).subscribe(updateArticleList(articlesList1El));
 
-fromEvent(articlesListEl, 'change').pipe(
-  switchMap(event => {
-    const articleId = (event.target as HTMLSelectElement).value;
-    return ajax.getJSON<ArticleWithBody>(`${url}/articles/${articleId}`)
-  }),
+fromEvent(getArticlesButton2El, 'click').pipe(
+  switchMap(() => ajax.getJSON<Article[]>(`${url}/articles`)),
   retry(),
-).subscribe(updateArticle);
+).subscribe(updateArticleList(articlesList2El));
